@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     captureButton: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
         borderRadius: 50,
         padding: 15,
         marginBottom: 20,

@@ -1,17 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Navigation from './src/config/navigation';
 
-import Camera from './src/components/camera';
-import Video from  './src/components/video'
-import Todo from './src/components/imageTodo'
-
+import MainNavigator from './src/config/navigation';
 
 export default function App() {
   return (
     <View style={styles.container}>
-  <Navigation/>
-    {/* <Todo/> */}
+    <MainNavigator/>
       <StatusBar style="auto" />
     </View>
   );

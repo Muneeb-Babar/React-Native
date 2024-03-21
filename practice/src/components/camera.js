@@ -37,32 +37,30 @@ export default function app() {
         );
     }
 
-    // async function snapPicture(){
-    //     // const photo= await cameraRef.current.takePictureAsync()
-    //     // setImage(photo)
+    async function snapPicture(){
+        const photo= await cameraRef.current.takePictureAsync()
+        setImage(photo)
 
-    //     // if(mediaPermission.granted){
-    //     //     await MediaLibrary.saveToLibraryAsync(photo.uri)
-    //     //     alert('Save to gallery')
-    //     // }
-    //     const video= await cameraRef.current.recordAsync()
-    //     setImage(video)
-    // }
-
-    async function snapPicture() {
-        if (cameraRef.current) {
-            try {
-                const video = await cameraRef.current.recordAsync();
-                setImage(video);
-                if (mediaPermission.granted) {
-                    await MediaLibrary.saveToLibraryAsync(video.uri);
-                    alert('Video saved to gallery');
-                }
-            } catch (error) {
-                console.error('Failed to record video: ', error);
-            }
-        }
+        // if(mediaPermission.granted){
+        //     await MediaLibrary.saveToLibraryAsync(photo.uri)
+        //     alert('Save to gallery')
+        // }
     }
+
+    // async function snapPicture() {
+    //     if (cameraRef.current) {
+    //         try {
+    //             const video = await cameraRef.current.recordAsync();
+    //             setImage(video);
+    //             if (mediaPermission.granted) {
+    //                 await MediaLibrary.saveToLibraryAsync(video.uri);
+    //                 alert('Video saved to gallery');
+    //             }
+    //         } catch (error) {
+    //             console.error('Failed to record video: ', error);
+    //         }
+    //     }
+    // }
 
     return (
         <View style={styles.container}>
