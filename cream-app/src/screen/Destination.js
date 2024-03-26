@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 
-import { View, Button, StyleSheet, Text } from 'react-native'
+import { View, Button, StyleSheet, Text ,TouchableOpacity } from 'react-native'
 import * as Location from 'expo-location'
 
 const Destination = ({navigation}) => {
@@ -25,10 +25,10 @@ const Destination = ({navigation}) => {
     console.log(location)
 
     if (!location) {
-        return <Text>Allow Location access</Text> || errorMsg
+        return <Text style={{textAlign:'center'}}>Allow Location access</Text> || errorMsg
     }
     return (
-        <View>
+        <View style={styles.container}>
             <MapView style={styles.map}
                 initialRegion={{
                     latitude: location.coords.latitude,
@@ -45,7 +45,11 @@ const Destination = ({navigation}) => {
                     // description={marker.description}
                 />
             </MapView>
-            <Button title='Car Selection' onPress={()=>{navigation.navigate('CarSelection')}}/>
+            <View style={styles.buttonContainer}>
+            <TouchableOpacity style={[styles.button, styles.button1]} onPress={() => { navigation.navigate('CarSelection') }}>
+                <Text style={styles.buttonText}>Car Selection</Text>
+            </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -55,7 +59,28 @@ const styles = StyleSheet.create({
     },
     map: {
         width: '100%',
-        height: '90%',
+        height: '80%',
+    },
+    buttonContainer:{
+        flex:1,
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    button: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+        marginBottom: 10,
+        width: '90%',
+        alignItems: 'center',
+        marginTop:30,
+    },
+    button1: {
+        backgroundColor: 'green',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
     },
 });
 
