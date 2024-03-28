@@ -28,7 +28,7 @@ function MainNavigator() {
                 }}/>
                 <Stack.Screen name="Pickup" component={Pickup} />
                 <Stack.Screen name="Destination" component={Destination} />
-                <Stack.Screen name="CarSelection" component={CarSelection} />
+                <Stack.Screen name="RideSelection" component={CarSelection} />
                 <Stack.Screen name="RideHistoryDetail" component={RideHistoryDetail} />
             </Stack.Navigator>
         </NavigationContainer>

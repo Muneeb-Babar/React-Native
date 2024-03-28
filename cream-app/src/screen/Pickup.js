@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 
-import { View, Button, StyleSheet, Text,TouchableOpacity } from 'react-native'
+import { View, Button, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native'
 import * as Location from 'expo-location';
 
 const Pickup = ({ navigation }) => {
 
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
+    const [places,setPlaces]=useState([])
+    const [pickup,setPickup]=useState()
 
     useEffect(() => {
         (async () => {
@@ -16,15 +18,43 @@ const Pickup = ({ navigation }) => {
                 setErrorMsg('Permission to access location was denied');
                 return;
             }
-            let location = await Location.getCurrentPositionAsync({});
-            setLocation(location);
+
+            // for live location
+            Location.watchPositionAsync({
+                accuracy: 6,
+                distanceInterval: 1,
+                timeInterval: 500
+            }, (location) => {
+                setLocation(location)
+            })
+
+            // for Only current location
+            // let location = await Location.getCurrentPositionAsync({});
+            // setLocation(location);
         })();
     }, []);
 
     console.log(location)
 
     if (!location) {
-        return <Text style={{textAlign:'center'}}>Allow Location access</Text> || errorMsg
+        return <Text style={{ textAlign: 'center' }}>Allow Location access</Text> || errorMsg
+    }
+
+    const search = (text) => {
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: 'fsq3/lReeKv6KsjeNnFikQMsEGTy8geGo3ZjRxERxcY0Gbg='
+            }
+        };
+
+        const {latitude,longitude}=location.coords
+
+        fetch(`https://api.foursquare.com/v3/places/search?query=${text}&ll=${latitude},${longitude}&radius=5000`, options)
+            .then(response => response.json())
+            .then(response => setPlaces(response.results))
+            .catch(err => console.error(err));
     }
 
     return (
@@ -42,13 +72,21 @@ const Pickup = ({ navigation }) => {
                         longitude: location.coords.longitude
                     }}
                     title='My location'
-                    // description={marker.description}
+                // description={marker.description}
                 />
             </MapView>
             <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.button, styles.button1]} onPress={() => { navigation.navigate('Destination') }}>
-                <Text style={styles.buttonText}>Destination</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.button1]} onPress={() => { navigation.navigate('Destination',{pickup}) }}>
+                    <Text style={styles.buttonText}>Destination</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.searchContainer}>
+            <TextInput style={styles.search} placeholder='Enter any location' onChangeText={search} />
+            {places.map(item=>{
+                return <TouchableOpacity style={styles.searchContent} onPress={()=>setPickup(item)}>
+                    <Text>{item.name},{item.location.address}</Text>
+                </TouchableOpacity>
+            })}
             </View>
         </View>
     )
@@ -61,10 +99,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '80%',
     },
-    buttonContainer:{
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center',
+    buttonContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     button: {
         paddingVertical: 10,
@@ -73,7 +111,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         width: '90%',
         alignItems: 'center',
-        marginTop:30,
+        marginTop: 30,
     },
     button1: {
         backgroundColor: 'green',
@@ -82,6 +120,29 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18,
     },
+    search: {
+        // position: 'absolute',
+        width: '100%',
+        textAlign: 'center',
+        height: 40,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        fontSize: 20,
+        borderWidth: .2,
+        borderColor: 'black',
+        marginTop: 3
+    },
+    searchContainer:{
+        position:'absolute',
+        top:0,
+        width:'100%'
+    },
+    searchContent:{
+        width:'100%',
+        backgroundColor:'white',
+        paddingLeft:25,
+        paddingTop:15,
+    }
 });
 
 export default Pickup

@@ -38,9 +38,9 @@ const styles = StyleSheet.create({
     },
     text:{
         textAlign:'center',
-        fontSize:20,
+        fontSize:22,
         marginBottom:14,
-
+        color:'green'
     }
 })
 
