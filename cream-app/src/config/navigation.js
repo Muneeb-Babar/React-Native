@@ -8,6 +8,7 @@ import Destination from '../screen/Destination';
 import CarSelection from '../screen/Carselection';
 import RideHistory from '../screen/rideHistory';
 import RideHistoryDetail from '../screen/rideHistoryDetail';
+import Status from '../screen/Status';
 import Splash from '../screen/Splash';
 
 
@@ -30,6 +31,7 @@ function MainNavigator() {
                 <Stack.Screen name="Destination" component={Destination} />
                 <Stack.Screen name="RideSelection" component={CarSelection} />
                 <Stack.Screen name="RideHistoryDetail" component={RideHistoryDetail} />
+                <Stack.Screen name="Status" component={Status} />
             </Stack.Navigator>
         </NavigationContainer>
     );

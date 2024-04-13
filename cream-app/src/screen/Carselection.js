@@ -1,9 +1,11 @@
 
 import React, { useState } from 'react'
 import { View, Button, Image, StyleSheet, Text, TouchableOpacity, } from 'react-native'
+import { requestedRide } from '../config/firebase'
 
 const CarSelection = ({ navigation, route }) => {
     const [fare,setFare]=useState(0)
+    const [selectedVehicle, setSelectedVehicle] = useState(null);
     const { pickup, destination } = route.params
     const fares = {
         car: 160,
@@ -18,7 +20,16 @@ const CarSelection = ({ navigation, route }) => {
         const distance=calcCrow(pickupLat,pickupLog,destinationLat,destinationLog)
         const ride=Math.round(distance*baseFare)
         setFare(ride)
+        setSelectedVehicle(vehicle)
         // alert('Rs'+ride)
+    }
+    function bookRide() {
+        if (selectedVehicle) {
+            requestedRide({ pickup, destination, carType: selectedVehicle, fare });
+            navigation.navigate('Status'); // Navigate after the ride has been requested
+        } else {
+            alert('Please select a vehicle before booking the ride.');
+        }
     }
 
     function calcCrow(lat1, lon1, lat2, lon2) {
@@ -39,6 +50,8 @@ const CarSelection = ({ navigation, route }) => {
     function toRad(Value) {
         return Value * Math.PI / 180;
     }
+
+    
     return (
         <View style={styles.container}>
             <View style={styles.main}>
@@ -76,7 +89,7 @@ const CarSelection = ({ navigation, route }) => {
             
             <View style={styles.buttonContainer}>
             {fare > 0 && <Text style={{textAlign:'center',fontSize:22}}>{`Your Ride Fare Rs : ${fare}`}</Text>}
-            <TouchableOpacity style={[styles.button, styles.button1]} onPress={() => { navigation.navigate('RideSelection',{pickup,destination}) }}>
+            <TouchableOpacity style={[styles.button, styles.button1]} onPress={bookRide}>
                 <Text style={styles.buttonText}>Book Your Ride</Text>
             </TouchableOpacity>
             </View>
